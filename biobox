@@ -1,0 +1,56 @@
+import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CDevice;
+import com.pi4j.io.i2c.I2CFactory;
+import java.io.IOException;
+
+
+public class BioBoxChanger extends java.lang.Object
+{
+   private double pressure;
+   private double temperature;
+   private double pH;
+   private double nitrogenContent;
+   private double difference; 
+   
+   public void pressureDiff(pressure, difference)
+   {
+      if (pressure != 0.45)
+      {
+         difference = pressure - 0.45;
+         pressure = pressure - difference; 
+      }
+   }
+   
+   public void temperatureDiff(temperature, difference)
+   {
+      if (temperature != 19.5)
+      {
+         temperature = temperature - 19.5;
+         temperature = temperature - difference; 
+      }
+   }
+   
+   public void pH(pH, difference)
+   {
+      if (pH != 8.05)
+      {
+         pH = pH - 8.05;
+         pH = pH - difference; 
+      }
+   }
+   
+}
+
+public class BioBoxReader()
+{
+   public static void main(String[] args)
+   {
+      I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
+      I2CDevice device = bus.getDevice(0x28);
+      device.write(0x28, (byte)0x80);
+      Thread.sleep(800);
+      byte[] data = new byte[4];
+      device.read(data, 0, 2);
+
+   }
+}
